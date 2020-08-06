@@ -1,0 +1,224 @@
+[
+    {
+        "class_name" : "Best Sellers",
+        "class_id" : 0,
+        "items" : [
+        {
+            "id": 3,
+            "name": "Soup",
+            "desc": "tangy tomato soup supper",
+            "item_image": "https://b.zmtcdn.com/data/dish_photos/d87/76e92b3192f452ec4337c7f8000acd87.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
+            "item_cost": 115
+        },
+        {
+            "id": 4,
+            "name": "Chicken tikka",
+            "desc": "Spicy Chicken tandoor item",
+            "item_image": "https://b.zmtcdn.com/data/dish_photos/8db/691916455c5e586f98aa2563515088db.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
+            "item_cost": 249
+        },
+        {
+            "id": 5,
+            "name": "chicken dry fry",
+            "desc": "2 pcs of chicken ultimate dry fry",
+            "item_image": "https://b.zmtcdn.com/data/dish_photos/fc6/7d76e9dc7288b9f8b9448c03f4606fc6.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
+            "item_cost": 123
+        },
+        {
+            "id": 1,
+            "name": "veg-kebab e nabab",
+            "desc": "Indian Delicacy",
+            "item_image": "https://b.zmtcdn.com/data/dish_photos/a77/b90a25dddc645cd0a17f673275748a77.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
+            "item_cost": 251
+        },
+        {
+            "id": 2,
+            "name": "Noodles",
+            "desc": "chinese fast food",
+            "item_image": "https://b.zmtcdn.com/data/dish_photos/bc4/714bef95254532944e9366b37760abc4.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
+            "item_cost": 130
+        },
+       
+        {
+            "id": 6,
+            "name": "chicken kebab",
+            "desc": "Indian delicacy enjoyed best in tandoor style",
+            "item_image": "https://b.zmtcdn.com/data/dish_photos/857/aba0a059485477d3fb9ff95d52656857.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
+            "item_cost": 235
+        },
+        {
+            "id": 7,
+            "name": "spicy affair",
+            "desc": "2 pc of very spicy chicken",
+            "item_image": "https://b.zmtcdn.com/data/dish_photos/cec/399a8f202120aa3226049646d1530cec.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
+            "item_cost": 100
+        }
+    ]
+    },
+    {
+        "class_name" : "Restaurant recommendation",
+        "class_id" : 1,
+        "items" : [
+            {
+                "id": 1,
+                "name": "veg-kebab",
+                "desc": "Indian Delicacy",
+                "item_image": "https://b.zmtcdn.com/data/dish_photos/a77/b90a25dddc645cd0a17f673275748a77.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
+                "item_cost": 250
+            },
+            {
+                "id": 2,
+                "name": "Noodles",
+                "desc": "chinese fast food",
+                "item_image": "https://b.zmtcdn.com/data/dish_photos/bc4/714bef95254532944e9366b37760abc4.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
+                "item_cost": 130
+            },
+            {
+                "id": 3,
+                "name": "Soup",
+                "desc": "tangy tomato soup supper",
+                "item_image": "https://b.zmtcdn.com/data/dish_photos/d87/76e92b3192f452ec4337c7f8000acd87.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
+                "item_cost": 115
+            },
+            {
+                "id": 4,
+                "name": "Chicken tikka",
+                "desc": "Spicy Chicken tandoor item",
+                "item_image": "https://b.zmtcdn.com/data/dish_photos/8db/691916455c5e586f98aa2563515088db.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
+                "item_cost": 249
+            },
+            {
+                "id": 5,
+                "name": "chicken dry fry",
+                "desc": "2 pcs of chicken ultimate dry fry",
+                "item_image": "https://b.zmtcdn.com/data/dish_photos/fc6/7d76e9dc7288b9f8b9448c03f4606fc6.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
+                "item_cost": 123
+            },
+            {
+                "id": 6,
+                "name": "chicken kebab",
+                "desc": "Indian delicacy enjoyed best in tandoor style",
+                "item_image": "https://b.zmtcdn.com/data/dish_photos/857/aba0a059485477d3fb9ff95d52656857.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
+                "item_cost": 235
+            },
+            {
+                "id": 7,
+                "name": "spicy affair",
+                "desc": "2 pc of very spicy chicken",
+                "item_image": "https://b.zmtcdn.com/data/dish_photos/cec/399a8f202120aa3226049646d1530cec.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
+                "item_cost": 100
+            }
+        ]
+    },
+    {
+        "class_name" : "chefs suggestion",
+        "class_id" : 2,
+        "items" : [
+            {
+                "id": 4,
+                "name": "Chicken tikka",
+                "desc": "Spicy Chicken tandoor item",
+                "item_image": "https://b.zmtcdn.com/data/dish_photos/8db/691916455c5e586f98aa2563515088db.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
+                "item_cost": 249
+            },
+            {
+                "id": 5,
+                "name": "chicken dry fry",
+                "desc": "2 pcs of chicken ultimate dry fry",
+                "item_image": "https://b.zmtcdn.com/data/dish_photos/fc6/7d76e9dc7288b9f8b9448c03f4606fc6.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
+                "item_cost": 123
+            },
+            {
+                "id": 6,
+                "name": "chicken kebab",
+                "desc": "Indian delicacy enjoyed best in tandoor style",
+                "item_image": "https://b.zmtcdn.com/data/dish_photos/857/aba0a059485477d3fb9ff95d52656857.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
+                "item_cost": 235
+            },
+            {
+                "id": 7,
+                "name": "spicy affair",
+                "desc": "2 pc of very spicy chicken",
+                "item_image": "https://b.zmtcdn.com/data/dish_photos/cec/399a8f202120aa3226049646d1530cec.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
+                "item_cost": 100
+            },
+        {
+            "id": 1,
+            "name": "veg-kebab e nabab",
+            "desc": "Indian Delicacy",
+            "item_image": "https://b.zmtcdn.com/data/dish_photos/a77/b90a25dddc645cd0a17f673275748a77.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
+            "item_cost": 251
+        },
+        {
+            "id": 2,
+            "name": "Noodles",
+            "desc": "chinese fast food",
+            "item_image": "https://b.zmtcdn.com/data/dish_photos/bc4/714bef95254532944e9366b37760abc4.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
+            "item_cost": 130
+        },
+        {
+            "id": 3,
+            "name": "Soup",
+            "desc": "tangy tomato soup supper",
+            "item_image": "https://b.zmtcdn.com/data/dish_photos/d87/76e92b3192f452ec4337c7f8000acd87.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
+            "item_cost": 115
+        }
+        
+    ]
+    },
+    {
+        "class_name" : "favorites",
+        "class_id" : 3,
+        "items" : [
+            {
+                "id": 1,
+                "name": "veg-kebab",
+                "desc": "Indian Delicacy",
+                "item_image": "https://b.zmtcdn.com/data/dish_photos/a77/b90a25dddc645cd0a17f673275748a77.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
+                "item_cost": 250
+            },
+            {
+                "id": 2,
+                "name": "Noodles",
+                "desc": "chinese fast food",
+                "item_image": "https://b.zmtcdn.com/data/dish_photos/bc4/714bef95254532944e9366b37760abc4.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
+                "item_cost": 130
+            },
+            {
+                "id": 3,
+                "name": "Soup",
+                "desc": "tangy tomato soup supper",
+                "item_image": "https://b.zmtcdn.com/data/dish_photos/d87/76e92b3192f452ec4337c7f8000acd87.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
+                "item_cost": 115
+            },
+            {
+                "id": 4,
+                "name": "Chicken tikka",
+                "desc": "Spicy Chicken tandoor item",
+                "item_image": "https://b.zmtcdn.com/data/dish_photos/8db/691916455c5e586f98aa2563515088db.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
+                "item_cost": 249
+            },
+            {
+                "id": 5,
+                "name": "chicken dry fry",
+                "desc": "2 pcs of chicken ultimate dry fry",
+                "item_image": "https://b.zmtcdn.com/data/dish_photos/fc6/7d76e9dc7288b9f8b9448c03f4606fc6.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
+                "item_cost": 123
+            },
+            {
+                "id": 6,
+                "name": "chicken kebab",
+                "desc": "Indian delicacy enjoyed best in tandoor style",
+                "item_image": "https://b.zmtcdn.com/data/dish_photos/857/aba0a059485477d3fb9ff95d52656857.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
+                "item_cost": 235
+            },
+            {
+                "id": 7,
+                "name": "spicy affair",
+                "desc": "2 pc of very spicy chicken",
+                "item_image": "https://b.zmtcdn.com/data/dish_photos/cec/399a8f202120aa3226049646d1530cec.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
+                "item_cost": 100
+            }
+        ]
+    }
+]
