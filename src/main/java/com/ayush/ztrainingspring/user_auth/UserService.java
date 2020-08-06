@@ -1,11 +1,15 @@
 package com.ayush.ztrainingspring.user_auth;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
 @Service
-public class AuthService {
+public class UserService {
+
+//    @Autowired
+//    UserRepository userRepository;
 
     private static ArrayList<User> userRecords = new ArrayList<User>();
 
@@ -56,6 +60,7 @@ public class AuthService {
     }
     public String encryptPassword(String password)
     {
+        //adding salt and computing hashcode
         return password;
     }
     public User getUserDetails(User user)
@@ -64,7 +69,12 @@ public class AuthService {
         return userDetails;
     }
 
-    public ArrayList<User> getUserRecords() {
-        return userRecords;
+    public ArrayList<User> getAllUsers() {
+        ArrayList<User> allUsers = new ArrayList<User>();
+        for(User user :userRecords)
+        {
+            allUsers.add(getUserDetails(user));
+        }
+        return allUsers;
     }
 }
