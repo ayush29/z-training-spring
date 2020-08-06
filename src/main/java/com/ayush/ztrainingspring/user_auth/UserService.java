@@ -4,35 +4,49 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserService {
 
-//    @Autowired
-//    UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-    private static ArrayList<User> userRecords = new ArrayList<User>();
 
-    static {
-        userRecords.add(new User("Ayush Jain","ayush@xyz.com","9090909090","ayush123"));
-        userRecords.add(new User("Zatin Meraz","zatin@xyz.com","9090909090","zatin123"));
-        userRecords.add(new User("Sai Kamal","sai@xyz.com","9090909090", "sai123"));
-        userRecords.add(new User("Naman","naman@xyz.com","9090909090","naman123"));
-        userRecords.add(new User("Sidharth","sidharth@xyz.com","9090909090","sid123"));
-        //load user records from storage
-    }
+//    public void setUserRepository(UserRepository userRepository)
+//    {
+//        UserService.userRepository = userRepository;
+//    }
+
+//    private static ArrayList<User> userRecords = new ArrayList<User>();
+
+//    static {
+////        userRecords.add(new User("Ayush Jain","ayush@xyz.com","9090909090","ayush123"));
+////        userRecords.add(new User("Zatin Meraz","zatin@xyz.com","9090909090","zatin123"));
+////        userRecords.add(new User("Sai Kamal","sai@xyz.com","9090909090", "sai123"));
+////        userRecords.add(new User("Naman","naman@xyz.com","9090909090","naman123"));
+////        userRecords.add(new User("Sidharth","sidharth@xyz.com","9090909090","sid123"));
+//        //load user records from storage
+//        userRepository.save(new User("Ayush Jain","ayush@xyz.com","9090909090","ayush123"));
+//        userRepository.save(new User("Zatin Meraz","zatin@xyz.com","9090909090","zatin123"));
+//        userRepository.save(new User("Sai Kamal","sai@xyz.com","9090909090", "sai123"));
+//        userRepository.save(new User("Naman","naman@xyz.com","9090909090","naman123"));
+//        userRepository.save(new User("Sidharth","sidharth@xyz.com","9090909090","sid123"));
+//    }
 
     public User addNewUser(String name, String email, String phone, String password)
     {
         User user = new User(name, email, phone,password);
-        userRecords.add(user);
+//        userRecords.add(user);
         //save new user in storage
+        userRepository.save(user);
         return user;
     }
     public User addNewUser(User user)
     {
-        userRecords.add(user);
+//        userRecords.add(user);
         //save user in storage
+        userRepository.save(user);
         return getUserDetails(user);
     }
     public User verifyUser(String email,String password)
@@ -49,29 +63,40 @@ public class UserService {
     }
     public User findUserByEmail(String email)
     {
-        for( User user: userRecords)
-        {
-            if(user.getEmail().equals(email))
-            {
-                return user;
-            }
-        }
-        return null;
+//        for( User user: userRecords)
+//        {
+//            if(user.getEmail().equals(email))
+//            {
+//                return user;
+//            }
+//        }
+//        return null;
+        User user = userRepository.findByEmail(email);
+        return user;
     }
     public String encryptPassword(String password)
     {
         //adding salt and computing hashcode
         return password;
     }
+
     public User getUserDetails(User user)
     {
-        User userDetails = new User(user.getName(),user.getEmail(),user.getPhone(),"");
+
+        User userDetails = new User();
+        //hiding sensitive details like password
+        userDetails.setId(user.getId());
+        userDetails.setEmail(user.getEmail());
+        userDetails.setName(user.getName());
+        userDetails.setPhone(user.getPhone());
+        userDetails.setPassword("");
         return userDetails;
     }
 
-    public ArrayList<User> getAllUsers() {
-        ArrayList<User> allUsers = new ArrayList<User>();
-        for(User user :userRecords)
+    public List<User> getAllUsers() {
+//        ArrayList<User> allUsers = new ArrayList<User>();
+        List<User> allUsers = new ArrayList<User>();
+        for(User user :userRepository.findAll())
         {
             allUsers.add(getUserDetails(user));
         }

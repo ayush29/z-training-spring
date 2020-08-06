@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @CrossOrigin(origins = {"http://localhost:8081"})
@@ -19,7 +20,6 @@ public class UserController {
     public ResponseEntity<User> login(@RequestBody Map<String,String> credentials) {
         String email = credentials.get("email");
         String password = credentials.get("password");
-
         User user = userService.verifyUser(email,password);
         if(user!=null)
             return new ResponseEntity<>(user, HttpStatus.OK);
@@ -28,10 +28,18 @@ public class UserController {
     }
 
     @PostMapping("/user/signup")
-    public User signup(@RequestBody User user)
+    public ResponseEntity<User> signup(@RequestBody User user)
     {
-        User newUser = userService.addNewUser(user);
-        return newUser;
+        try{
+            User newUser = userService.addNewUser(user);
+            return new ResponseEntity<>(newUser,HttpStatus.OK);
+        }
+        catch(Exception err)
+        {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            //todo: can return specific errors like user already exist etc.
+        }
+
     }
 
     @PostMapping("/user/details")
@@ -47,9 +55,27 @@ public class UserController {
     }
 
     @GetMapping("/user/all")
-    public ArrayList<User> getAllUsers()
+    public List<User> getAllUsers()
     {
         return userService.getAllUsers();
+    }
+
+    @PostMapping("/user/dummy-users")
+    public ResponseEntity<List<User>> addDummyData()
+    {
+        try{
+            userService.addNewUser(new User("Ayush Jain","ayush@xyz.com","9090909090","ayush123"));
+            userService.addNewUser(new User("Zatin Meraz","zatin@xyz.com","9090909090","zatin123"));
+            userService.addNewUser(new User("Sai Kamal","sai@xyz.com","9090909090", "sai123"));
+            userService.addNewUser(new User("Naman","naman@xyz.com","9090909090","naman123"));
+            userService.addNewUser(new User("Sidharth","sidharth@xyz.com","9090909090","sid123"));
+            return new ResponseEntity<>(userService.getAllUsers(),HttpStatus.CREATED);
+        }
+        catch (Exception err)
+        {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
     }
 
 }

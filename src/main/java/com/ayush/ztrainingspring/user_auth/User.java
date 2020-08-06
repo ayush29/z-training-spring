@@ -5,13 +5,14 @@ package com.ayush.ztrainingspring.user_auth;
 import com.sun.javafx.beans.IDProperty;
 
 import javax.annotation.Generated;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "user")
 public class User {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
 
     private String name;
@@ -28,6 +29,11 @@ public class User {
 //        this.username = username;
 //        this.password = password;
 //    }
+    public User()
+    {
+
+    }
+
     public User(String name, String email, String phone, String password)
     {
         this.name = name;
