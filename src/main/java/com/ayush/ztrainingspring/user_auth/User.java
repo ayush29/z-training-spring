@@ -2,10 +2,8 @@ package com.ayush.ztrainingspring.user_auth;
 
 //import java.util.ArrayList;
 
-import com.sun.javafx.beans.IDProperty;
-
-import javax.annotation.Generated;
 import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
 @Table(name = "user")
@@ -13,12 +11,15 @@ public class User {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
+    @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false, unique = true)
     private String email;
 
     private String phone;
@@ -42,11 +43,11 @@ public class User {
         this.password = password;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
