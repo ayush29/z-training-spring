@@ -1,86 +1,114 @@
 package com.ayush.ztrainingspring.reviews.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ayush.ztrainingspring.user_auth.User;
+import com.sun.istack.NotNull;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-import java.net.MalformedURLException;
-import java.util.*;
+import javax.persistence.*;
+import java.util.Calendar;
+import java.util.List;
 
+@Entity
+@Table(name = "reviews")
 public class Review {
-    private final UUID id;
-    private final ReviewProfile profile;
-    private final int reviewRatingNum;
-    private int reviewNumLikes, reviewNumComments;
-    private final Calendar reviewRatingTime;
-    private final List<String> reviewTags;
-    private final String reviewText;
-    private List<Comment> commentList;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
-    public Review(ReviewProfile profile, int reviewRatingNum, List<String> reviewTags, String reviewText) {
-        this.id = UUID.randomUUID();
-        this.profile = profile;
-        this.reviewRatingNum = reviewRatingNum;
-        this.reviewNumLikes = 0;
-        this.reviewNumComments = 0;
-        this.reviewTags = reviewTags;
-        this.reviewText = reviewText;
-        this.commentList = new ArrayList<>();
-        this.reviewRatingTime = Calendar.getInstance();
-    }
+    @NotNull
+    private int rating;
 
-    public Review(@JsonProperty("reviewRatingNum") int reviewRatingNum, @JsonProperty("reviewText") String reviewText) throws MalformedURLException {
-        this.id = UUID.randomUUID();
-        this.profile = new ReviewProfile();
-        this.reviewRatingNum = reviewRatingNum;
-        this.reviewNumLikes = 0;
-        this.reviewNumComments = 0;
-        this.reviewTags = new ArrayList<>(Arrays.asList("biryani", "delicious food"));
-        this.reviewText = reviewText;
-        this.commentList = new ArrayList<>();
-        this.reviewRatingTime = Calendar.getInstance();
-    }
+    @Column(columnDefinition = "integer default 0", nullable = false)
+    private int likes;
 
-    public ReviewProfile getProfile() {
-        return profile;
-    }
+    @Lob
+    private String text;
 
-    public int getReviewRatingNum() {
-        return reviewRatingNum;
-    }
+    @Column(nullable = false)
+    private Calendar createdTime;
 
-    public int getReviewNumLikes() {
-        return reviewNumLikes;
-    }
+    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private User user;
 
-    public void setReviewNumLikes() {
-        reviewNumLikes++;
-    }
+    @OneToMany(mappedBy = "review", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<ReviewTag> reviewTags;
 
-    public int getReviewNumComments() {
-        return reviewNumComments;
-    }
+    @OneToMany(mappedBy = "review", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Comment> comments;
 
-    public Calendar getReviewRatingTime() {
-        return reviewRatingTime;
-    }
+    public Review() {}
 
-    public List<String> getReviewTags() {
-        return reviewTags;
-    }
+//    public Review(@JsonProperty("reviewRatingNum") int reviewRatingNum, @JsonProperty("reviewText") String reviewText) throws MalformedURLException {
+//        this.reviewRatingNum = reviewRatingNum;
+//        this.reviewNumLikes = 0;
+//        this.reviewText = reviewText;
+//        this.reviewRatingTime = Calendar.getInstance();
+//    }
 
-    public UUID getId() {
+    public int getId() {
         return id;
     }
 
-    public void addComment(Comment comment) {
-        commentList.add(0, comment);
-        reviewNumComments++;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getReviewText() {
-        return reviewText;
+    public int getRating() {
+        return rating;
     }
 
-    public List<Comment> getCommentList() {
-        return commentList;
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
+    public int getLikes() {
+        return likes;
+    }
+
+    public void setLikes(int likes) {
+        this.likes = likes;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public Calendar getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(Calendar createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public List<ReviewTag> getReviewTags() {
+        return reviewTags;
+    }
+
+    public void setReviewTags(List<ReviewTag> reviewTags) {
+        this.reviewTags = reviewTags;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 }

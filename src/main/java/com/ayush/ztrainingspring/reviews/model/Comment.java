@@ -1,49 +1,55 @@
 package com.ayush.ztrainingspring.reviews.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ayush.ztrainingspring.user_auth.User;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.UUID;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "comments")
 public class Comment {
-    private final UUID id;
-    private final URL img;
-    private final String username, userTag;
-    private final String text;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
-    public Comment(URL img, String username, String userTag, String text) {
-        this.id = UUID.randomUUID();
-        this.img = img;
-        this.username = username;
-        this.userTag = userTag;
-        this.text = text;
-    }
-    public Comment(@JsonProperty("text") String text) throws MalformedURLException {
-        this.id = UUID.randomUUID();
-        this.img = new URL("https://b.zmtcdn.com/data/pictures/chains/5/312995/aa4fc3fc70d8e32772a724d6cbc55ab0_featured_v2.jpg?fit=around%7C100%3A100&amp;crop=100%3A100%3B%2A%2C%2A");
-        this.username = "Biryani by Kilo";
-        this.userTag = "Management";
-        this.text = text;
-    }
+    @Lob
+    @Column(nullable = false)
+    private String text;
 
-    public UUID getId() {
+    @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private User user;
+
+    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "review_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Review review;
+
+    public Comment() {}
+
+    public int getId() {
         return id;
     }
 
-    public URL getImg() {
-        return img;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getUserTag() {
-        return userTag;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getText() {
         return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

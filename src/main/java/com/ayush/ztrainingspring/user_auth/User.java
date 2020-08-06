@@ -2,17 +2,38 @@ package com.ayush.ztrainingspring.user_auth;
 
 //import java.util.ArrayList;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "user")
 public class User {
+
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false, unique = true)
     private String email;
+
     private String phone;
+
 //    private ArrayList<String> bookmarks;
 //    public User(String username, String password)
 //    {
 //        this.username = username;
 //        this.password = password;
 //    }
+    public User()
+    {
+
+    }
+
     public User(String name, String email, String phone, String password)
     {
         this.name = name;
@@ -20,6 +41,15 @@ public class User {
         this.phone = phone;
         this.password = password;
     }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public String getName()
     {
         return this.name;
@@ -33,6 +63,7 @@ public class User {
     {
         return this.email;
     }
+
     public void setEmail(String email)
     {
         this.email = email;
@@ -48,5 +79,9 @@ public class User {
 
     public String getPassword() {
         return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
