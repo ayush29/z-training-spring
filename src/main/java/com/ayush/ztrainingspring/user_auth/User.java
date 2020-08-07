@@ -3,7 +3,10 @@ package com.ayush.ztrainingspring.user_auth;
 //import java.util.ArrayList;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.UUID;
+
 
 @Entity
 @Table(name = "user")
@@ -13,15 +16,20 @@ public class User {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false)
+    @NotNull
+    @Size(max = 50)
     private String name;
 
-    @Column(nullable = false)
+    @NotNull
+    @Size(min = 6,max = 15)
     private String password;
 
-    @Column(nullable = false, unique = true)
+    @NotNull
+    @Size(max = 100)
+    @Column(unique = true)
     private String email;
 
+    @Size(max = 15)
     private String phone;
 
 //    private ArrayList<String> bookmarks;

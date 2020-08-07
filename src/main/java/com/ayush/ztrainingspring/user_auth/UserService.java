@@ -36,7 +36,7 @@ public class UserService {
 
     public User addNewUser(String name, String email, String phone, String password)
     {
-        User user = new User(name, email, phone,password);
+        User user = new User(name, email, phone, generateHash(password));
 //        userRecords.add(user);
         //save new user in storage
         userRepository.save(user);
@@ -46,13 +46,14 @@ public class UserService {
     {
 //        userRecords.add(user);
         //save user in storage
+        user.setPassword(generateHash(user.getPassword()));
         userRepository.save(user);
         return getUserDetails(user);
     }
     public User verifyUser(String email,String password)
     {
         User user = findUserByEmail(email);
-        if(user!=null && user.getPassword().equals(password))
+        if(user!=null && user.getPassword().equals(generateHash(password)))
         {
             return getUserDetails(user);
         }
@@ -74,10 +75,12 @@ public class UserService {
         User user = userRepository.findByEmail(email);
         return user;
     }
-    public String encryptPassword(String password)
+    public String generateHash(String password)
     {
         //adding salt and computing hashcode
-        return password;
+        final String SALT = "#0*5#&";
+        String str = SALT + password;
+        return Integer.toString(str.hashCode());
     }
 
     public User getUserDetails(User user)
