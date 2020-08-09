@@ -32,10 +32,7 @@ public class ReviewService {
 
     public Review addReview(Map<String, String> reviewInfo) {
         Review review = new Review();
-        if(reviewInfo.containsKey("text"))
-            review.setText(reviewInfo.get("text"));
-        else
-            review.setText("");
+        review.setText(reviewInfo.getOrDefault("text", ""));
 
         if(reviewInfo.containsKey("rating"))
            review.setRating(Integer.parseInt(reviewInfo.get("rating")));
