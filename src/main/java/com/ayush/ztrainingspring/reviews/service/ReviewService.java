@@ -4,6 +4,7 @@ import com.ayush.ztrainingspring.reviews.dao.CommentRepository;
 import com.ayush.ztrainingspring.reviews.dao.ReviewRepository;
 import com.ayush.ztrainingspring.reviews.model.Comment;
 import com.ayush.ztrainingspring.reviews.model.Review;
+import com.ayush.ztrainingspring.reviews.requestHandlers.ReviewInfoHandler;
 import com.ayush.ztrainingspring.user_auth.User;
 import com.ayush.ztrainingspring.user_auth.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,25 +31,23 @@ public class ReviewService {
         return reviewRepository.findByOrderByCreatedTimeDesc();
     }
 
-    public Review addReview(Map<String, String> reviewInfo) {
+    public Review addReview(ReviewInfoHandler reviewInfo) {
         Review review = new Review();
-        review.setText(reviewInfo.getOrDefault("text", ""));
+        review.setText(reviewInfo.getText());
 
-        if(reviewInfo.containsKey("rating"))
-           review.setRating(Integer.parseInt(reviewInfo.get("rating")));
+        if(reviewInfo.getRating() >= 1 && reviewInfo.getRating() <= 5)
+           review.setRating(reviewInfo.getRating());
         else
-            throw new RuntimeException("please rate the order!!!");
+            throw new RuntimeException("please rate the order with a valid rating!!!");
 
-        int userId;
-        if(reviewInfo.containsKey("user_id"))
-            userId = Integer.parseInt(reviewInfo.get("user_id"));
-        else
-            throw new RuntimeException("the review request came from a ghost user!!!");
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new RuntimeException("user not found to add review: " + reviewInfo.get("user_id"))
-                );
+        User user = userRepository.findById(reviewInfo.getUserId())
+                                  .orElseThrow(
+                                          () -> new RuntimeException("user with id: " + reviewInfo.getUserId() +
+                                                  " not found to add review")
+                                  );
         review.setUser(user);
-
+        review.setReviewTags(reviewInfo.getReviewTags());
+        review.getReviewTags().forEach(tag -> tag.setReview(review));
         review.setCreatedTime(Calendar.getInstance());
         return reviewRepository.save(review);
     }
@@ -91,8 +90,13 @@ public class ReviewService {
 
     public Comment addComment(int reviewId, Map<String, String> commentInfo) {
         Comment comment = new Comment();
-        if(commentInfo.containsKey("text"))
-            comment.setText(commentInfo.get("text"));
+        if(commentInfo.containsKey("text")) {
+            String commentText = commentInfo.get("text").trim();
+            if(commentText.equals(""))
+                throw new RuntimeException("comment should have some valid text and not spaces!!!");
+            else
+                comment.setText(commentText);
+        }
         else
             throw new RuntimeException("comment needs to have text!!!");
 
@@ -108,15 +112,18 @@ public class ReviewService {
                                   );
         comment.setUser(user);
 
-        Review review = reviewRepository.findById(reviewId).orElseThrow(
-                () -> new RuntimeException("review not found to add comment: " + reviewId)
-        );
+        Review review = reviewRepository.findById(reviewId)
+                                        .orElseThrow(
+                                                () -> new RuntimeException("review not found to add comment: " +
+                                                        reviewId)
+                                        );
+        System.out.println(review.getId());
         comment.setReview(review);
         comment.setCreatedTime(Calendar.getInstance());
         return commentRepository.save(comment);
     }
 
-    public Review addLike(int id) {
+    public int addLike(int id) {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(
                         () -> new RuntimeException("review not found to increase a like: " +
@@ -124,9 +131,16 @@ public class ReviewService {
                 );
         int likes = review.getLikes();
         review.setLikes(likes+1);
-        return reviewRepository.save(review);
+        return reviewRepository.save(review).getLikes();
     }
 
-//    public Review getUserNumReviews(int id) {
-//    }
+    public int getUserNumReviews(int userId) {
+//        User user = userRepository.findById(userId)
+//
+        return reviewRepository.findByUserId(userId)
+                               .map(List::size)
+                               .orElseThrow(
+                                       () -> new RuntimeException("user not found to get number of reviews: " + userId)
+                               );
+    }
 }

@@ -22,7 +22,7 @@ public class Comment {
     @Column(nullable = false)
     private Calendar createdTime;
 
-    @OneToOne(optional = false, cascade = CascadeType.ALL )
+    @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;

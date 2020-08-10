@@ -42,11 +42,6 @@ public class Review {
 
     public Review() {}
 
-    public Review(@JsonProperty("rating") int rating) {
-        this.rating = rating;
-        this.createdTime = Calendar.getInstance();
-    }
-
     public Review(@JsonProperty("rating") int rating, @JsonProperty("text") String text) {
         this.rating = rating;
         this.text = text;
