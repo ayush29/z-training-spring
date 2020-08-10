@@ -1,22 +1,23 @@
 package com.ayush.ztrainingspring.reviews.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "review_tags")
 public class ReviewTag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Lob
     @Column(nullable = false)
     private String text;
 
+    @JsonIgnore
     @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "review_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -24,11 +25,11 @@ public class ReviewTag {
 
     public ReviewTag() {}
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

@@ -1,6 +1,7 @@
 package com.ayush.ztrainingspring.reviews.model;
 
 import com.ayush.ztrainingspring.user_auth.User;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.istack.NotNull;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -14,7 +15,7 @@ import java.util.List;
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @NotNull
     private int rating;
@@ -28,31 +29,35 @@ public class Review {
     @Column(nullable = false)
     private Calendar createdTime;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
-    @OneToMany(mappedBy = "review", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
     private List<ReviewTag> reviewTags;
 
-    @OneToMany(mappedBy = "review", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
     private List<Comment> comments;
 
     public Review() {}
 
-//    public Review(@JsonProperty("reviewRatingNum") int reviewRatingNum, @JsonProperty("reviewText") String reviewText) throws MalformedURLException {
-//        this.reviewRatingNum = reviewRatingNum;
-//        this.reviewNumLikes = 0;
-//        this.reviewText = reviewText;
-//        this.reviewRatingTime = Calendar.getInstance();
-//    }
+    public Review(@JsonProperty("rating") int rating) {
+        this.rating = rating;
+        this.createdTime = Calendar.getInstance();
+    }
 
-    public int getId() {
+    public Review(@JsonProperty("rating") int rating, @JsonProperty("text") String text) {
+        this.rating = rating;
+        this.text = text;
+        this.createdTime = Calendar.getInstance();
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
