@@ -74,6 +74,11 @@ public class UserService {
         return addNewUser(user);
     }
 
+    public Boolean isUserOnline(Integer id)
+    {
+        User user = userRepository.findById(id).orElse(null);
+        return user!=null&&user.getLoggedIn()? true: false;
+    }
     public User verifyUser(String email,String password)
     {
         User user = findUserByEmail(email);
