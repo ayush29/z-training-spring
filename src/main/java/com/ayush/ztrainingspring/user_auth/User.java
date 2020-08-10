@@ -31,6 +31,10 @@ public class User {
     @Size(max = 15)
     private String phone;
 
+//    @Column(columnDefinition = "varchar(255) default 'https://b.zmtcdn.com/images/user_avatars/wine_2x.png'")
+    @NotNull
+    private String imgUrl = "https://b.zmtcdn.com/images/user_avatars/wine_2x.png";
+
 //    private ArrayList<String> bookmarks;
 //    public User(String username, String password)
 //    {
@@ -48,6 +52,14 @@ public class User {
         this.email = email;
         this.phone = phone;
         this.password = password;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 
     public Integer getId() {
