@@ -25,6 +25,10 @@ public class ReviewTag {
 
     public ReviewTag() {}
 
+    public ReviewTag(String text) {
+        this.text = text;
+    }
+
     public Integer getId() {
         return id;
     }

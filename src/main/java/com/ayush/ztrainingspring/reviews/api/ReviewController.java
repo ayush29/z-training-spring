@@ -2,6 +2,7 @@ package com.ayush.ztrainingspring.reviews.api;
 
 import com.ayush.ztrainingspring.reviews.model.Comment;
 import com.ayush.ztrainingspring.reviews.model.Review;
+import com.ayush.ztrainingspring.reviews.requestHandlers.ReviewInfoHandler;
 import com.ayush.ztrainingspring.reviews.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class ReviewController {
     }
 
     @PostMapping
-    public Review addReview(@RequestBody Map<String, String> reviewInfo) {
+    public Review addReview(@RequestBody ReviewInfoHandler reviewInfo) {
         return reviewService.addReview(reviewInfo);
     }
 
@@ -57,7 +58,17 @@ public class ReviewController {
     }
 
     @PostMapping(path = "/{id}/likes")
-    public Review addLike(@PathVariable("id") int id) {
+    public int addLike(@PathVariable("id") int id) {
         return reviewService.addLike(id);
+    }
+
+    @GetMapping(path = "/user/{id}/num-reviews")
+    public int getUserNumReviews(@PathVariable("id") int userId) {
+        return reviewService.getUserNumReviews(userId);
+    }
+
+    @GetMapping(path = "/user/{id}")
+    public List<Review> getUserReviews(@PathVariable("id") int userId) {
+        return reviewService.getUserReviews(userId);
     }
 }
