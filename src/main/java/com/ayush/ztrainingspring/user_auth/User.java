@@ -2,9 +2,15 @@ package com.ayush.ztrainingspring.user_auth;
 
 //import java.util.ArrayList;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Calendar;
 
 
 @Entity
@@ -35,6 +41,15 @@ public class User {
     @NotNull
     private String imgUrl = "https://b.zmtcdn.com/images/user_avatars/wine_2x.png";
 
+    @NotNull
+    private Boolean loggedIn = false;
+
+    @CreationTimestamp
+    private Calendar createdOn;
+
+    @UpdateTimestamp
+    private Calendar updatedOn;
+
 //    private ArrayList<String> bookmarks;
 //    public User(String username, String password)
 //    {
@@ -52,6 +67,14 @@ public class User {
         this.email = email;
         this.phone = phone;
         this.password = password;
+    }
+
+    public Boolean getLoggedIn() {
+        return loggedIn;
+    }
+
+    public void setLoggedIn(Boolean loggedIn) {
+        this.loggedIn = loggedIn;
     }
 
     public String getImgUrl() {
@@ -97,6 +120,7 @@ public class User {
         this.phone = phone;
     }
 
+    @JsonIgnore
     public String getPassword() {
         return password;
     }
