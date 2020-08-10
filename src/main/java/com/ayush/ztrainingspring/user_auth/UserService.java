@@ -92,6 +92,7 @@ public class UserService {
         userDetails.setEmail(user.getEmail());
         userDetails.setName(user.getName());
         userDetails.setPhone(user.getPhone());
+        userDetails.setImgUrl(user.getImgUrl());
         userDetails.setPassword("");
         return userDetails;
     }
