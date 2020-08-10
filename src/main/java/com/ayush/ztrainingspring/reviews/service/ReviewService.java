@@ -135,12 +135,16 @@ public class ReviewService {
     }
 
     public int getUserNumReviews(int userId) {
-//        User user = userRepository.findById(userId)
-//
         return reviewRepository.findByUserId(userId)
                                .map(List::size)
                                .orElseThrow(
                                        () -> new RuntimeException("user not found to get number of reviews: " + userId)
+                               );
+    }
+    public List<Review> getUserReviews(int userId) {
+        return reviewRepository.findByUserId(userId)
+                               .orElseThrow(
+                                       () -> new RuntimeException("user not found to get his/her reviews: " + userId)
                                );
     }
 }

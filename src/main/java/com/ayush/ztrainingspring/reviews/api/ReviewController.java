@@ -66,4 +66,9 @@ public class ReviewController {
     public int getUserNumReviews(@PathVariable("id") int userId) {
         return reviewService.getUserNumReviews(userId);
     }
+
+    @GetMapping(path = "/user/{id}")
+    public List<Review> getUserReviews(@PathVariable("id") int userId) {
+        return reviewService.getUserReviews(userId);
+    }
 }
