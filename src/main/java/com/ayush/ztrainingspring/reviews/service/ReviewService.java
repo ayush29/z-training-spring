@@ -126,4 +126,7 @@ public class ReviewService {
         review.setLikes(likes+1);
         return reviewRepository.save(review);
     }
+
+//    public Review getUserNumReviews(int id) {
+//    }
 }

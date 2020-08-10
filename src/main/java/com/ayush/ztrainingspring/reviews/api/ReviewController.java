@@ -57,7 +57,12 @@ public class ReviewController {
     }
 
     @PostMapping(path = "/{id}/likes")
-    public Review addLike(@PathVariable("id") int id) {
-        return reviewService.addLike(id);
+    public int addLike(@PathVariable("id") int id) {
+        return reviewService.addLike(id).getLikes();
     }
+
+//    @PostMapping(path = "/{id}/user/num-reviews")
+//    public Review getUserNumReviews(@PathVariable("id") int id) {
+//        return reviewService.getUserNumReviews(id);
+//    }
 }
