@@ -65,8 +65,11 @@ public class UserService {
     public void logout(Integer id)
     {
         User user = userRepository.findById(id).orElse(null);
-        user.setLoggedIn(false);
-        userRepository.save(user);
+        if(user!=null)
+        {
+            user.setLoggedIn(false);
+            userRepository.save(user);
+        }
     }
     public User signup(User user)
     {
@@ -77,7 +80,7 @@ public class UserService {
     public Boolean isUserOnline(Integer id)
     {
         User user = userRepository.findById(id).orElse(null);
-        return user!=null&&user.getLoggedIn()? true: false;
+        return user != null && user.getLoggedIn();
     }
     public User verifyUser(String email,String password)
     {
