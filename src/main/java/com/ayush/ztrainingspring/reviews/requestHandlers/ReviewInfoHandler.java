@@ -3,6 +3,7 @@ package com.ayush.ztrainingspring.reviews.requestHandlers;
 import com.ayush.ztrainingspring.reviews.model.ReviewTag;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ReviewInfoHandler {
@@ -19,7 +20,10 @@ public class ReviewInfoHandler {
         this.text = text;
         this.rating = rating;
         this.userId = userId;
-        this.reviewTags = reviewTags;
+        if(reviewTags == null)
+            this.reviewTags = new ArrayList<>();
+        else
+            this.reviewTags = reviewTags;
     }
 
     public String getText() {

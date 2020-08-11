@@ -10,9 +10,11 @@ import com.ayush.ztrainingspring.user_auth.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class ReviewService {
@@ -52,8 +54,15 @@ public class ReviewService {
         return reviewRepository.save(review);
     }
 
-    public long getNumReviews() {
-        return reviewRepository.count();
+    public long getNumReviews(int userId, String filterOption) {
+        switch (filterOption) {
+            case "AllReviews":
+                return reviewRepository.count();
+            case "MyReviews":
+                return getUserNumReviews(userId);
+            default:
+                throw new RuntimeException("filtering option not found to get num reviews: " + filterOption);
+        }
     }
 
     public List<Review> getAllSortedReviews(String option) {
@@ -78,6 +87,37 @@ public class ReviewService {
         int startInd = (pageNum - 1) * REVIEWS_PER_PAGE;
         int endInd = Math.min(startInd + REVIEWS_PER_PAGE, sortedReviews.size());
         return sortedReviews.subList(startInd, endInd);
+    }
+
+    public List<Review> getAllFilteredSortedPageReviews(int userId,
+                                                        String filterOption,
+                                                        String sortOption,
+                                                        int pageNum) {
+        List<Review> allSortedReviews = getAllSortedReviews(sortOption);
+        switch (filterOption) {
+            case "AllReviews":
+                break;
+            case "MyReviews":
+                System.out.println(userId);
+                User user = userRepository.findById(userId)
+                        .orElseThrow(
+                                () -> new RuntimeException("user not found to filter his/her reviews -> user id: " +
+                                        userId)
+                        );
+                allSortedReviews = allSortedReviews.stream()
+                                                   .filter(review -> review.getUser().getId().equals(userId))
+                                                   .collect(Collectors.toList());
+                System.out.println(user);
+                break;
+            default:
+                throw new RuntimeException("filtering option not found: " + filterOption);
+        }
+        System.out.println(allSortedReviews.size());
+        int totalNumPages = (int) Math.ceil((double) allSortedReviews.size()/(double) REVIEWS_PER_PAGE);
+        pageNum = Math.min(totalNumPages, Math.max(1, pageNum));
+        int startInd = (pageNum - 1) * REVIEWS_PER_PAGE;
+        int endInd = Math.min(startInd + REVIEWS_PER_PAGE, allSortedReviews.size());
+        return allSortedReviews.subList(startInd, endInd);
     }
 
     public List<Comment> getComments(int id) {
@@ -135,16 +175,26 @@ public class ReviewService {
     }
 
     public int getUserNumReviews(int userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(
+                        () -> new RuntimeException("user not found to get his/her num reviews -> user id: " + userId)
+                );
         return reviewRepository.findByUserId(userId)
                                .map(List::size)
-                               .orElseThrow(
-                                       () -> new RuntimeException("user not found to get number of reviews: " + userId)
+                               .orElseGet(
+                                       () -> 0
                                );
     }
+
     public List<Review> getUserReviews(int userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(
+                        () -> new RuntimeException("user not found to get his/her reviews -> user id: " + userId)
+                );
         return reviewRepository.findByUserId(userId)
-                               .orElseThrow(
-                                       () -> new RuntimeException("user not found to get his/her reviews: " + userId)
+                               .orElseGet(
+                                       ArrayList::new
                                );
     }
+
 }
