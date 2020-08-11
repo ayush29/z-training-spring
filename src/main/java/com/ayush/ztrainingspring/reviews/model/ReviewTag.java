@@ -17,6 +17,9 @@ public class ReviewTag {
     @Column(nullable = false)
     private String text;
 
+    @Column(nullable = false)
+    private String type;
+
     @JsonIgnore
     @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "review_id", nullable = false)
@@ -51,5 +54,13 @@ public class ReviewTag {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
