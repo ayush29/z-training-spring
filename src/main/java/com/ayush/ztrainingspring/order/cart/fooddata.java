@@ -1,4 +1,4 @@
-package com.ayush.ztrainingspring.order;
+package com.ayush.ztrainingspring.order.cart;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
