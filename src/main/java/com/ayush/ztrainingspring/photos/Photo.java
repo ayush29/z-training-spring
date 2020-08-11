@@ -22,6 +22,8 @@ public class Photo {
 
 
     private int userID;
+    private int restID;
+
 
 
     private String category;
@@ -34,10 +36,22 @@ public class Photo {
     private int dislikes;
 
 
+
     public Photo() {
         timeAdded = Timestamp.from(Instant.now());
         likes = 0;
         dislikes = 0;
+    }
+
+    public Photo(Photo photo) {
+        id = photo.id;
+        userID = photo.userID;
+        restID = photo.restID;
+        category = photo.category;
+        link = photo.link;
+        timeAdded = photo.timeAdded;
+        likes = photo.likes;
+        dislikes = photo.dislikes;
     }
 
     public Integer getId() {
@@ -52,6 +66,15 @@ public class Photo {
         return dislikes;
     }
 
+    public void IncLikes() {
+        this.likes = this.likes  + 1;
+    }
+
+    public void IncDislikes() {
+        this.dislikes = this.dislikes  + 1;
+    }
+
+
 
 
     public Integer getuserID() {
@@ -60,6 +83,10 @@ public class Photo {
 
     public String getCategory() {
         return category;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public void setuserID(Integer userID) {
