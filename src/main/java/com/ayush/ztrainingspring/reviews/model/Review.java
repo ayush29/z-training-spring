@@ -7,9 +7,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "reviews")
@@ -39,6 +37,7 @@ public class Review {
     private List<ReviewTag> reviewTags = new ArrayList<>();
 
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
+    @OrderBy("createdTime DESC")
     private List<Comment> comments = new ArrayList<>();
 
     public Review() {}
