@@ -27,6 +27,11 @@ public class ReviewController {
         return reviewService.addReview(reviewInfo);
     }
 
+    @GetMapping(path = "/user/{userId}/num-reviews")
+    public int getUserNumReviews(@PathVariable("userId") int userId) {
+        return reviewService.getUserNumReviews(userId);
+    }
+
     @GetMapping("/user/{userId}/filter/{filterOption}/num-reviews")
     public long getNumReviews(@PathVariable("userId") int userId,
                               @PathVariable("filterOption") String filterOption) {
@@ -67,18 +72,13 @@ public class ReviewController {
         return reviewService.addComment(reviewId, commentInfo);
     }
 
-    @PostMapping(path = "/{id}/likes")
-    public int addLike(@PathVariable("id") int id) {
-        return reviewService.addLike(id);
+    @PostMapping(path = "/{id}/user/{userId}/like")
+    public int addLike(@PathVariable("id") int id, @PathVariable("userId") int userId) {
+        return reviewService.addLike(id, userId);
     }
 
-    @GetMapping(path = "/user/{userId}/num-reviews")
-    public int getUserNumReviews(@PathVariable("userId") int userId) {
-        return reviewService.getUserNumReviews(userId);
-    }
-
-    @GetMapping(path = "/user/{userId}")
-    public List<Review> getUserReviews(@PathVariable("userId") int userId) {
-        return reviewService.getUserReviews(userId);
-    }
+//    @GetMapping(path = "/user/{userId}")
+//    public List<Review> getUserReviews(@PathVariable("userId") int userId) {
+//        return reviewService.getUserReviews(userId);
+//    }
 }
