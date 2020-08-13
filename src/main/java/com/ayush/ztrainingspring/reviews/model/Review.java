@@ -1,5 +1,6 @@
 package com.ayush.ztrainingspring.reviews.model;
 
+import com.ayush.ztrainingspring.order.restaurants.Restaurants;
 import com.ayush.ztrainingspring.user_auth.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.istack.NotNull;
@@ -39,6 +40,11 @@ public class Review {
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
     @OrderBy("createdTime DESC")
     private List<Comment> comments = new ArrayList<>();
+
+    @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "restaurant_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Restaurants restaurant;
 
     public Review() {}
 
@@ -110,5 +116,13 @@ public class Review {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public Restaurants getRestaurant() {
+        return restaurant;
+    }
+
+    public void setRestaurant(Restaurants restaurant) {
+        this.restaurant = restaurant;
     }
 }

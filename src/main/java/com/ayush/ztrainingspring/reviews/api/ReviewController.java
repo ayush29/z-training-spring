@@ -17,14 +17,14 @@ public class ReviewController {
     @Autowired
     private ReviewService reviewService;
 
-    @GetMapping
-    public List<Review> getAllReviews() {
-        return reviewService.getAllReviews();
+    @GetMapping("/restaurant/{restaurantId}")
+    public List<Review> getAllReviews(@PathVariable("restaurantId") int restaurantId) {
+        return reviewService.getAllReviews(restaurantId);
     }
 
-    @PostMapping
-    public Review addReview(@RequestBody ReviewInfoHandler reviewInfo) {
-        return reviewService.addReview(reviewInfo);
+    @PostMapping("/restaurant/{restaurantId}")
+    public Review addReview(@RequestBody ReviewInfoHandler reviewInfo, @PathVariable("restaurantId") int restaurantId) {
+        return reviewService.addReview(reviewInfo, restaurantId);
     }
 
     @GetMapping(path = "/user/{userId}/num-reviews")

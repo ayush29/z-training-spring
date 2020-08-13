@@ -1,5 +1,7 @@
 package com.ayush.ztrainingspring.reviews.service;
 
+import com.ayush.ztrainingspring.order.restaurants.Restaurantrepo;
+import com.ayush.ztrainingspring.order.restaurants.Restaurants;
 import com.ayush.ztrainingspring.reviews.dao.CommentRepository;
 import com.ayush.ztrainingspring.reviews.dao.ReviewRepository;
 import com.ayush.ztrainingspring.reviews.model.Comment;
@@ -26,13 +28,23 @@ public class ReviewService {
     @Autowired
     private CommentRepository commentRepository;
 
+    @Autowired
+    private Restaurantrepo restaurantrepo;
+
     private final static int REVIEWS_PER_PAGE = 2;
 
-    public List<Review> getAllReviews() {
-        return reviewRepository.findByOrderByCreatedTimeDesc();
+    public List<Review> getAllReviews(int restaurantId) {
+        Restaurants restaurant = restaurantrepo.findById(restaurantId)
+                .orElseThrow(
+                () -> new RuntimeException("unable to find restaurant with id: " + restaurantId)
+        );
+        return reviewRepository.findByRestaurantOrderByCreatedTimeAsc(restaurant);
+//        return reviews.stream()
+//                .filter(review -> review.getRestaurant().getrid().equals(restaurantId))
+//                .collect(Collectors.toList());
     }
 
-    public Review addReview(ReviewInfoHandler reviewInfo) {
+    public Review addReview(ReviewInfoHandler reviewInfo, int restaurantId) {
         Review review = new Review();
         review.setText(reviewInfo.getText());
 
@@ -47,6 +59,12 @@ public class ReviewService {
                                           () -> new RuntimeException("user with id: " + reviewInfo.getUserId() +
                                                   " not found to add review or is not logged in")
                                   );
+
+        Restaurants restaurant = restaurantrepo.findById(restaurantId)
+                .orElseThrow(
+                        () -> new RuntimeException("unable to find restaurant with id: " + restaurantId)
+                );
+        review.setRestaurant(restaurant);
         review.setUser(user);
         review.setReviewTags(reviewInfo.getReviewTags());
         review.getReviewTags().forEach(tag -> tag.setReview(review));
