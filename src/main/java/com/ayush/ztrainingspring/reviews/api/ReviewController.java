@@ -32,53 +32,35 @@ public class ReviewController {
         return reviewService.getUserNumReviews(userId);
     }
 
-    @GetMapping("/user/{userId}/filter/{filterOption}/num-reviews")
-    public long getNumReviews(@PathVariable("userId") int userId,
-                              @PathVariable("filterOption") String filterOption) {
-        return reviewService.getNumReviews(userId, filterOption);
+    // needed for pagination in front end
+    @GetMapping("/restaurant/{restaurantId}/filter/{filterOption}/user/{userId}/num-reviews")
+    public long getFilteredNumReviews(@PathVariable("restaurantId") int restaurantId,
+                                      @PathVariable("filterOption") String filterOption,
+                                      @PathVariable("userId") int userId) {
+        return reviewService.getFilteredNumReviews(restaurantId, filterOption, userId);
     }
 
-    @GetMapping("/sort/{option}")
-    public List<Review> getAllSortedReviews(@PathVariable("option") String option) {
-        return reviewService.getAllSortedReviews(option);
-    }
-
-    @GetMapping("/sort/{option}/page/{pageNum}")
-    public List<Review> getAllSortedPageReviews(@PathVariable("option") String option,
-                                                @PathVariable("pageNum") int pageNum) {
-        return reviewService.getAllSortedPageReviews(option, pageNum);
-    }
-
-    @GetMapping("/user/{userId}/filter/{filterOption}/sort/{sortOption}/page/{pageNum}")
-    public List<Review> getAllSortedPageReviews(@PathVariable("userId") int userId,
+    @GetMapping("/restaurant/{restaurantId}/filter/{filterOption}/user/{userId}/sort/{sortOption}/page/{pageNum}")
+    public List<Review> getAllSortedPageReviews(@PathVariable("restaurantId") int restaurantId,
+                                                @PathVariable("userId") int userId,
                                                 @PathVariable("filterOption") String filterOption,
                                                 @PathVariable("sortOption") String sortOption,
                                                 @PathVariable("pageNum") int pageNum) {
-        System.out.println("controller" + userId);
-        return reviewService.getAllFilteredSortedPageReviews(userId, filterOption, sortOption, pageNum);
+        return reviewService.getAllFilteredSortedPageReviews(restaurantId, userId, filterOption, sortOption, pageNum);
     }
 
-    /**
-     * @param id -> the possible review id
-     * @return comments of review with {id}
-     */
-    @GetMapping(path = "/{revId}/comments")
-    public List<Comment> getComments(@PathVariable("revId") int id) {
-        return reviewService.getComments(id);
+    @GetMapping(path = "/{reviewId}/comments")
+    public List<Comment> getComments(@PathVariable("reviewId") int reviewId) {
+        return reviewService.getComments(reviewId);
     }
 
-    @PostMapping(path = "/{revId}/comments")
-    public Comment addComment(@PathVariable("revId") int reviewId, @RequestBody Map<String,String> commentInfo) {
+    @PostMapping(path = "/{reviewId}/comments")
+    public Comment addComment(@PathVariable("reviewId") int reviewId, @RequestBody Map<String,String> commentInfo) {
         return reviewService.addComment(reviewId, commentInfo);
     }
 
-    @PostMapping(path = "/{id}/user/{userId}/like")
-    public int addLike(@PathVariable("id") int id, @PathVariable("userId") int userId) {
-        return reviewService.addLike(id, userId);
+    @PostMapping(path = "/{reviewId}/user/{userId}/like")
+    public int addLike(@PathVariable("reviewId") int reviewId, @PathVariable("userId") int userId) {
+        return reviewService.addLike(reviewId, userId);
     }
-
-//    @GetMapping(path = "/user/{userId}")
-//    public List<Review> getUserReviews(@PathVariable("userId") int userId) {
-//        return reviewService.getUserReviews(userId);
-//    }
 }

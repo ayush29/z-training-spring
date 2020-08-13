@@ -12,36 +12,43 @@ import com.ayush.ztrainingspring.user_auth.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Calendar;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class ReviewService {
     @Autowired
     private ReviewRepository reviewRepository;
-
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private CommentRepository commentRepository;
-
     @Autowired
     private Restaurantrepo restaurantrepo;
 
     private final static int REVIEWS_PER_PAGE = 2;
 
+    //------------------------HELPER FUNCTIONS------------------------------//
+    public Restaurants isRestaurantIdValid(int restaurantId) {
+        return restaurantrepo.findById(restaurantId)
+                .orElseThrow(() -> new RuntimeException("unable to find restaurant with id: " + restaurantId));
+    }
+
+    public User isUserIdValid(int userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("user with id: " + userId + " not found"));
+    }
+
+    public User isUserIdValidAndLoggedIn(int userId) {
+        return userRepository.findById(userId)
+                .filter(User::getLoggedIn)
+                .orElseThrow(() -> new RuntimeException("user with id: " + userId + " not found or is not logged in"));
+    }
+
+    //------------------------Service FUNCTIONS------------------------------//
     public List<Review> getAllReviews(int restaurantId) {
-        Restaurants restaurant = restaurantrepo.findById(restaurantId)
-                .orElseThrow(
-                () -> new RuntimeException("unable to find restaurant with id: " + restaurantId)
-        );
+        Restaurants restaurant = isRestaurantIdValid(restaurantId);
         return reviewRepository.findByRestaurantOrderByCreatedTimeAsc(restaurant);
-//        return reviews.stream()
-//                .filter(review -> review.getRestaurant().getrid().equals(restaurantId))
-//                .collect(Collectors.toList());
     }
 
     public Review addReview(ReviewInfoHandler reviewInfo, int restaurantId) {
@@ -51,21 +58,12 @@ public class ReviewService {
         if(reviewInfo.getRating() >= 1 && reviewInfo.getRating() <= 5)
            review.setRating(reviewInfo.getRating());
         else
-            throw new RuntimeException("please provide a valid rating!!!");
+            throw new RuntimeException("please provide a valid rating in between 1-5!!!");
 
-        User user = userRepository.findById(reviewInfo.getUserId())
-                                  .filter(User::getLoggedIn)
-                                  .orElseThrow(
-                                          () -> new RuntimeException("user with id: " + reviewInfo.getUserId() +
-                                                  " not found to add review or is not logged in")
-                                  );
-
-        Restaurants restaurant = restaurantrepo.findById(restaurantId)
-                .orElseThrow(
-                        () -> new RuntimeException("unable to find restaurant with id: " + restaurantId)
-                );
-        review.setRestaurant(restaurant);
+        User user = isUserIdValidAndLoggedIn(reviewInfo.getUserId());
         review.setUser(user);
+        Restaurants restaurant = isRestaurantIdValid(restaurantId);
+        review.setRestaurant(restaurant);
         review.setReviewTags(reviewInfo.getReviewTags());
         review.getReviewTags().forEach(tag -> tag.setReview(review));
         review.setCreatedTime(Calendar.getInstance());
@@ -73,88 +71,75 @@ public class ReviewService {
     }
 
     public int getUserNumReviews(int userId) {
-        User user = userRepository.findById(userId)
-                                  .orElseThrow(
-                                      () -> new RuntimeException("user not found to get his/her" +
-                                                  " num reviews -> user id: " + userId)
-                                  );
-        return reviewRepository.findByUserId(userId)
-                .map(List::size)
-                .orElseGet(
-                        () -> 0
-                );
+        User user = isUserIdValid(userId);
+        return reviewRepository.findByUser(user).map(List::size).orElse(0);
     }
 
-    public long getNumReviews(int userId, String filterOption) {
+    public long getFilteredNumReviews(int restaurantId, String filterOption, int userId) {
+        Restaurants restaurant = isRestaurantIdValid(restaurantId);
+        List<Review> reviews = reviewRepository.findByRestaurant(restaurant);
         switch (filterOption) {
             case "AllReviews":
-                return reviewRepository.count();
+                return reviews.size();
             case "MyReviews":
-                return getUserNumReviews(userId);
+                isUserIdValid(userId);
+                return reviews.stream().filter(review -> review.getUser().getId().equals(userId)).count();
             default:
                 throw new RuntimeException("filtering option not found to get num reviews: " + filterOption);
         }
     }
 
-    public List<Review> getAllSortedReviews(String option) {
-        switch (option) {
-            case "NewestFirst":
-                return reviewRepository.findByOrderByCreatedTimeDesc();
-            case "OldestFirst":
-                return reviewRepository.findByOrderByCreatedTimeAsc();
-            case "HighestRated":
-                return reviewRepository.findByOrderByRatingDescCreatedTimeDesc();
-            case "LowestRated":
-                return reviewRepository.findByOrderByRatingAscCreatedTimeDesc();
-            default:
-                throw new RuntimeException("sorting option not found: " + option);
-        }
-    }
-
-    public List<Review> getAllSortedPageReviews(String option, int pageNum) {
-        List<Review> sortedReviews = getAllSortedReviews(option);
-        int totalNumPages = (int) Math.ceil((double) sortedReviews.size()/(double) REVIEWS_PER_PAGE);
-        pageNum = Math.min(totalNumPages, Math.max(1, pageNum));
-        int startInd = (pageNum - 1) * REVIEWS_PER_PAGE;
-        int endInd = Math.min(startInd + REVIEWS_PER_PAGE, sortedReviews.size());
-        return sortedReviews.subList(startInd, endInd);
-    }
-
-    public List<Review> getAllFilteredSortedPageReviews(int userId,
+    public List<Review> getAllFilteredSortedPageReviews(int restaurantId,
+                                                        int userId,
                                                         String filterOption,
                                                         String sortOption,
                                                         int pageNum) {
-        List<Review> allSortedReviews = getAllSortedReviews(sortOption);
+        Restaurants restaurant = isRestaurantIdValid(restaurantId);
+        List<Review> reviews = reviewRepository.findByRestaurant(restaurant);
         switch (filterOption) {
             case "AllReviews":
                 break;
             case "MyReviews":
-                User user = userRepository.findById(userId)
-                                          .filter(User::getLoggedIn)
-                                          .orElseThrow(
-                                              () -> new RuntimeException("user not found or not logged in " +
-                                                      "to filter his/her reviews -> user id: " + userId)
-                                          );
-                allSortedReviews = allSortedReviews.stream()
-                                                   .filter(review -> review.getUser().getId().equals(userId))
-                                                   .collect(Collectors.toList());
-                System.out.println(user);
+                isUserIdValidAndLoggedIn(userId);
+                 reviews = reviews.stream()
+                         .filter(review -> review.getUser().getId().equals(userId))
+                         .collect(Collectors.toList());
                 break;
             default:
                 throw new RuntimeException("filtering option not found: " + filterOption);
         }
-        int totalNumPages = (int) Math.ceil((double) allSortedReviews.size()/(double) REVIEWS_PER_PAGE);
+        //sorting reviews
+        switch (sortOption) {
+            case "NewestFirst":
+                reviews.sort(Comparator.comparing(Review::getCreatedTime).reversed());
+                break;
+            case "OldestFirst":
+                reviews.sort(Comparator.comparing(Review::getCreatedTime));
+                break;
+            case "HighestRated":
+                reviews.sort(Comparator.comparing(Review::getRating).reversed());
+                break;
+            case "LowestRated":
+                reviews.sort(Comparator.comparing(Review::getRating));
+                break;
+            default:
+                throw new RuntimeException("sorting option not found: " + sortOption);
+        }
+        int totalNumPages = (int) Math.ceil((double) reviews.size()/(double) REVIEWS_PER_PAGE);
+        if(totalNumPages == 0) return Collections.emptyList();
         pageNum = Math.min(totalNumPages, Math.max(1, pageNum));
         int startInd = (pageNum - 1) * REVIEWS_PER_PAGE;
-        int endInd = Math.min(startInd + REVIEWS_PER_PAGE, allSortedReviews.size());
-        return allSortedReviews.subList(startInd, endInd);
+        int endInd = Math.min(startInd + REVIEWS_PER_PAGE, reviews.size());
+        System.out.println(totalNumPages + " " + pageNum + " " + startInd + " " + endInd);
+        return reviews.subList(startInd, endInd);
     }
 
-    public List<Comment> getComments(int id) {
-        return reviewRepository.findById(id)
+    public List<Comment> getComments(int reviewId) {
+        return reviewRepository.findById(reviewId)
                         .map(Review::getComments)
                         .orElseThrow(
-                                () -> new RuntimeException("review with id: " + id + " not found to retrieve comments")
+                                () -> new RuntimeException("review with id: " + reviewId +
+                                        " not found to retrieve comments")
                         );
     }
 
@@ -175,12 +160,7 @@ public class ReviewService {
             userId = Integer.parseInt(commentInfo.get("user_id"));
         else
             throw new RuntimeException("comment comes from a ghost user!!!");
-        User user = userRepository.findById(userId)
-                                  .filter(User::getLoggedIn)
-                                  .orElseThrow(
-                                          () -> new RuntimeException("user not found or not logged in to add comment: "
-                                                  +  commentInfo.get("user_id"))
-                                  );
+        User user = isUserIdValidAndLoggedIn(userId);
         comment.setUser(user);
 
         Review review = reviewRepository.findById(reviewId)
@@ -194,29 +174,12 @@ public class ReviewService {
         return commentRepository.save(comment);
     }
 
-    public int addLike(int id, int userId) {
-        userRepository.findById(userId)
-                                  .filter(User::getLoggedIn)
-                                  .orElseThrow(() -> new RuntimeException("user not found or not logged in " +
-                                          "to like the review: "));
-
-        Review review = reviewRepository.findById(id)
-                .orElseThrow(
-                        () -> new RuntimeException("review not found to increase a like: " +
-                                String.valueOf(id))
-                );
+    public int addLike(int reviewId, int userId) {
+        isUserIdValidAndLoggedIn(userId);
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new RuntimeException("review not found to increase a like: " + reviewId));
         int likes = review.getLikes();
         review.setLikes(likes+1);
         return reviewRepository.save(review).getLikes();
     }
-
-//    public List<Review> getUserReviews(int userId) {
-//        userRepository.findById(userId)
-//                .orElseThrow(
-//                        () -> new RuntimeException("user not found to get his/her reviews -> user id: " + userId)
-//                );
-//        return reviewRepository.findByUserId(userId)
-//                               .orElseGet(ArrayList::new);
-//    }
-
 }
