@@ -27,9 +27,15 @@ public class ReviewController {
         return reviewService.addReview(reviewInfo);
     }
 
-    @GetMapping("/num-reviews")
-    public long getNumReviews() {
-        return reviewService.getNumReviews();
+    @GetMapping(path = "/user/{userId}/num-reviews")
+    public int getUserNumReviews(@PathVariable("userId") int userId) {
+        return reviewService.getUserNumReviews(userId);
+    }
+
+    @GetMapping("/user/{userId}/filter/{filterOption}/num-reviews")
+    public long getNumReviews(@PathVariable("userId") int userId,
+                              @PathVariable("filterOption") String filterOption) {
+        return reviewService.getNumReviews(userId, filterOption);
     }
 
     @GetMapping("/sort/{option}")
@@ -43,32 +49,36 @@ public class ReviewController {
         return reviewService.getAllSortedPageReviews(option, pageNum);
     }
 
+    @GetMapping("/user/{userId}/filter/{filterOption}/sort/{sortOption}/page/{pageNum}")
+    public List<Review> getAllSortedPageReviews(@PathVariable("userId") int userId,
+                                                @PathVariable("filterOption") String filterOption,
+                                                @PathVariable("sortOption") String sortOption,
+                                                @PathVariable("pageNum") int pageNum) {
+        System.out.println("controller" + userId);
+        return reviewService.getAllFilteredSortedPageReviews(userId, filterOption, sortOption, pageNum);
+    }
+
     /**
      * @param id -> the possible review id
      * @return comments of review with {id}
      */
-    @GetMapping(path = "/{id}/comments")
-    public List<Comment> getComments(@PathVariable("id") int id) {
+    @GetMapping(path = "/{revId}/comments")
+    public List<Comment> getComments(@PathVariable("revId") int id) {
         return reviewService.getComments(id);
     }
 
-    @PostMapping(path = "/{id}/comments")
-    public Comment addComment(@PathVariable("id") int reviewId, @RequestBody Map<String,String> commentInfo) {
+    @PostMapping(path = "/{revId}/comments")
+    public Comment addComment(@PathVariable("revId") int reviewId, @RequestBody Map<String,String> commentInfo) {
         return reviewService.addComment(reviewId, commentInfo);
     }
 
-    @PostMapping(path = "/{id}/likes")
-    public int addLike(@PathVariable("id") int id) {
-        return reviewService.addLike(id);
+    @PostMapping(path = "/{id}/user/{userId}/like")
+    public int addLike(@PathVariable("id") int id, @PathVariable("userId") int userId) {
+        return reviewService.addLike(id, userId);
     }
 
-    @GetMapping(path = "/user/{id}/num-reviews")
-    public int getUserNumReviews(@PathVariable("id") int userId) {
-        return reviewService.getUserNumReviews(userId);
-    }
-
-    @GetMapping(path = "/user/{id}")
-    public List<Review> getUserReviews(@PathVariable("id") int userId) {
-        return reviewService.getUserReviews(userId);
-    }
+//    @GetMapping(path = "/user/{userId}")
+//    public List<Review> getUserReviews(@PathVariable("userId") int userId) {
+//        return reviewService.getUserReviews(userId);
+//    }
 }

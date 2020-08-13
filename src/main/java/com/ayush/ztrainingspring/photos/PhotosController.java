@@ -9,6 +9,8 @@ import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -56,6 +58,38 @@ public class PhotosController {
     public String getTemp() {
         // This returns a JSON or XML with the users
         return "ss";
+    }
+
+    @GetMapping(path="/userLikes/{id}/{colName}")
+    public ResponseEntity updateLikesDislikes(@PathVariable int id,
+                                              @PathVariable String colName) {
+
+        System.out.println("id :" + id);
+        System.out.println("colName :" + colName);
+
+        Photo oldE = photosRepository.findByIdEquals(id);
+        Photo newE = new Photo(oldE);
+
+        if(colName.equals("like"))
+        {
+            System.out.println("inside like");
+            newE.IncLikes();
+        }
+        else if(colName.equals("dislike"))
+        {
+            System.out.println("inc dislikes :");
+            newE.IncDislikes();
+        }
+        else
+        {
+            System.out.println("null error");
+
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .body("Photo not Found");
+        }
+        photosRepository.save(newE);
+        return ResponseEntity.ok(newE);
     }
 
     @GetMapping(path="/userDetails/{id}")
