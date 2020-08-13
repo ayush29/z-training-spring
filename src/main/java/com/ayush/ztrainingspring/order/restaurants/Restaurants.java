@@ -1,13 +1,16 @@
 package com.ayush.ztrainingspring.order.restaurants;
 
-import java.util.*;
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import java.util.Map;
 
 @Entity
 public class Restaurants {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID rid;
+    private int id;
     private String rname;
     private float rrate;
     private String rdesc;
@@ -16,22 +19,20 @@ public class Restaurants {
     }
 
     Restaurants(String rname, float rrate,String rdesc){
-        this.rid = UUID.randomUUID();
         this.rname = rname;
         this.rrate = rrate;
         this.rdesc = rdesc;
     }
 
     Restaurants(Map<String, String> body) {
-        this.rid = UUID.randomUUID();
         this.rname = body.get("rname");
         this.rrate = Float.parseFloat(body.get("rrate"));
         this.rdesc = body.get("rdesc");
 
 	}
 
-    public UUID getrid(){
-        return this.rid;
+    public int getid(){
+        return this.id;
     }
     public String getrname(){
         return this.rname;
