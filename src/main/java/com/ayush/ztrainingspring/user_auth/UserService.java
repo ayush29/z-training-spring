@@ -1,5 +1,7 @@
 package com.ayush.ztrainingspring.user_auth;
 
+import com.ayush.ztrainingspring.order.restaurants.Restaurantrepo;
+import com.ayush.ztrainingspring.order.restaurants.Restaurants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -141,4 +143,47 @@ public class UserService {
 //        return allUsers;
         return userRepository.findAll();
     }
+//
+//    public void deleteUser(Integer id)
+//    {
+//        userRepository.deleteById(id);
+//    }
+
+    //methods for adding , deleting, finding bookmarked restraunts
+
+    @Autowired
+    private BookmarkRepository bookmarkRepository;
+
+
+    @Autowired
+    private Restaurantrepo restaurantrepo;
+
+    public Boolean addBookmark(Integer userID, Integer restroId)
+    {
+        User user = userRepository.findById(userID).orElse(null);
+        Restaurants restro = restaurantrepo.findById(restroId).orElse(null);
+        if(user!=null && restro!=null)
+        {
+            UserRestaurantBookmark bookmark = new UserRestaurantBookmark(user,restro);
+            bookmarkRepository.save(bookmark);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public void removeBookmark(Integer userId, Integer restroId)
+    {
+        BookmarkId bookmarkId = new BookmarkId(userId,restroId);
+        bookmarkRepository.deleteById(bookmarkId);
+    }
+
+    public Boolean findBookmark(Integer userId, Integer restroId)
+    {
+        BookmarkId bookmarkId = new BookmarkId(userId,restroId);
+        return bookmarkRepository.existsById(bookmarkId);
+    }
+
 }

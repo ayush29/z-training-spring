@@ -86,5 +86,28 @@ public class UserController {
         }
 
     }
+//    @DeleteMapping("/user/{id}")
+//    private void deleteUser(@PathVariable Integer id)
+//    {
+//        userService.deleteUser(id);
+//    }
+
+    @GetMapping("user/bookmark/{uid}/{rid}")
+    public Boolean isBookmarked(@PathVariable Integer uid, @PathVariable Integer rid)
+    {
+        return userService.findBookmark(uid,rid);
+    }
+
+    @PutMapping("user/bookmark/{uid}/{rid}")
+    public Boolean addBookmark(@PathVariable Integer uid, @PathVariable Integer rid)
+    {
+        return userService.addBookmark(uid,rid);
+    }
+
+    @DeleteMapping("user/bookmark/{uid}/{rid}")
+    public void deleteBookmark(@PathVariable Integer uid, @PathVariable Integer rid)
+    {
+        userService.removeBookmark(uid,rid);
+    }
 
 }
