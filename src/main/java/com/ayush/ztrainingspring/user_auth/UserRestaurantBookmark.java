@@ -21,7 +21,7 @@ public class UserRestaurantBookmark {
 
     @ManyToOne(fetch = FetchType.LAZY)//,cascade = CascadeType.REMOVE)
     @MapsId("restroId")
-//    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Restaurants restaurant;
 
     public UserRestaurantBookmark() {}
