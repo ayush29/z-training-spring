@@ -44,7 +44,7 @@ public class Mycartapi {
         for(Mycart itid : itids)
         {
             List<Menus> food_det =  menurepo.findfooddet(itid.getmenus());
-            ret.add(new Usercart(food_det.get(0).getitem_name(), food_det.get(0).getitem_cost(), itid.getquantity()));
+            ret.add(new Usercart(food_det.get(0).getitem_name(), food_det.get(0).getitem_cost(), itid.getquantity(), food_det.get(0).getitem_id()));
         }
         return ret;
     }
@@ -68,8 +68,13 @@ public class Mycartapi {
         else
         {
             Mycart thiscart = tochangecart.get(0);
-            thiscart.setaddquantity(qt);
-            mycartrepo.save(thiscart);
+            if(thiscart.getquantity() + qt <= 0)
+                mycartrepo.deletebyiuid(uid, iid);
+            else
+            {
+                thiscart.setaddquantity(qt);
+                mycartrepo.save(thiscart);
+            }
         }
         return mycartrepo.findAll();
     }
