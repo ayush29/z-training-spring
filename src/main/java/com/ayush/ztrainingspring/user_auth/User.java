@@ -119,8 +119,8 @@ public class User {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-
-    @JsonIgnore
+//
+//    @JsonIgnore
     public String getPassword() {
         return password;
     }
