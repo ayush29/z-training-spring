@@ -2,11 +2,6 @@ package com.ayush.ztrainingspring.photos;
 
 import com.ayush.ztrainingspring.order.restaurants.Restaurantrepo;
 import com.ayush.ztrainingspring.order.restaurants.Restaurants;
-import com.ayush.ztrainingspring.reviews.dao.CommentRepository;
-import com.ayush.ztrainingspring.reviews.dao.ReviewRepository;
-import com.ayush.ztrainingspring.reviews.model.Comment;
-import com.ayush.ztrainingspring.reviews.model.Review;
-import com.ayush.ztrainingspring.reviews.requestHandlers.ReviewInfoHandler;
 import com.ayush.ztrainingspring.user_auth.User;
 import com.ayush.ztrainingspring.user_auth.UserRepository;
 import com.ayush.ztrainingspring.photos.Photo;
@@ -25,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -141,6 +137,12 @@ public class PhotosService {
 
 
         String uploadStatus = "";
+        
+        File directory = new File(UPLOADED_FOLDER);
+        if (! directory.exists()){
+            directory.mkdir();
+        }
+    
 
         try {
 
@@ -187,5 +189,4 @@ public class PhotosService {
 //        return PhotosRepository.findByRestaurantAndCategory(restaurant, category);
 //    }
 }
-
 
